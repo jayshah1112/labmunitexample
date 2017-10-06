@@ -78,6 +78,7 @@
 				        <applicationName>${cloudhub.domain}</applicationName>					        	
 				        <properties>
    								<env.mule>${env}</env.mule>
+								<local.port>8081</local.port>
 						</properties>	        
 				    </configuration>
 				    <executions>
