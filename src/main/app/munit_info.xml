@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule version="EE-3.8.5"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+			http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+			http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	<!-- 
+	<flow name="exampleFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/munit" allowedMethods="GET" doc:name="HTTP"/>
+        <set-payload value="#[message.inboundProperties['http.query.params']['url_key']]" doc:name="Set Original Payload"/>
+        <flow-ref name="exampleFlow2" doc:name="exampleFlow2"/>
+
+        <choice doc:name="Choice">
+            <when expression="#[flowVars['my_variable'].equals('var_value_1')]">
+                <set-payload value="#['response_payload_1']" doc:name="Set Response Payload"/>
+            </when>
+            <otherwise>
+                <set-payload value="#['response_payload_2']" doc:name="Set Response Payload"/>
+            </otherwise>
+        </choice>
+    </flow>
+
+    <flow name="exampleFlow2">
+        <choice doc:name="Choice">
+            <when expression="#['payload_1'.equals(payload)]">
+                <flow-ref name="exampleSub_Flow1" doc:name="exampleSub_Flow1"/>
+            </when>
+            <otherwise>
+                <flow-ref name="exampleSub_Flow2" doc:name="exampleSub_Flow2"/>
+            </otherwise>
+        </choice>
+        </flow>
+
+    <sub-flow name="exampleSub_Flow1">
+        <set-variable variableName="my_variable" value="#['var_value_1']" doc:name="my_variable"/>
+    </sub-flow>
+
+    <sub-flow name="exampleSub_Flow2">
+        <set-variable variableName="my_variable" value="#['var_value_2']" doc:name="my_variable"/>
+    </sub-flow>
+	-->
+
+</mule>

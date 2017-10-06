@@ -1,0 +1,10 @@
+
+Short flows
+
+Modularize
+
+Environmentalism
+
+Readability and Maintainabilty
+
+Error Message

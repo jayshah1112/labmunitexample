@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xmlns:mock="http://www.mulesoft.org/schema/mule/mock" 
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns="http://www.mulesoft.org/schema/mule/core" 
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd">
+    
+
+	<munit:config name="munit" doc:name="MUnit configuration" />
+	
+	<spring:beans>
+		<spring:import resource="classpath:munit_decision.xml" />
+	</spring:beans>
+	
+	<!--  PATH : 1  Testing  -->
+    <munit:test name="decisionflow-PATH1-test-mock-call-1-suiteTest" description="MUnit Test">
+        <set-payload doc:name="Set Payload" value="#['value1']"/>
+        <flow-ref name="decisionFlow" doc:name="decisionFlow"/>
+        <mock:verify-call doc:name="Verify Call" messageProcessor="mule:sub-flow" times="1">
+            <mock:with-attributes>
+                <mock:with-attribute name="name" whereValue="#[matchContains('decision1SubFlow')]"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+    </munit:test>
+	
+	<munit:test name="decisionflow-PATH1-flowvar-1-test-mock-call-1-suiteTest" description="MUnit Test">
+        <set-payload doc:name="Set Payload" value="#['value1']"/>
+        <flow-ref name="decisionFlow" doc:name="decisionFlow"/>
+        <munit:assert-on-equals expectedValue="#['Decision1']" actualValue="#[flowVars.decisionVariable]" doc:name="Assert Equals" message="Sorry did not get expacted value. i.e. Decision1 instead we got #[flowVars.decisionVariable]"/>
+    </munit:test>
+    
+    
+    
+    
+    
+	
+	<!--  PATH : 2  Testing  -->
+	<munit:test name="decisionflow-PATH2-test-mock-call-1-suiteTest" description="MUnit Test">
+        <set-payload doc:name="Set Payload" value="#['value2']"/>
+        <flow-ref name="decisionFlow" doc:name="decisionFlow"/>
+        <mock:verify-call doc:name="Verify Call" messageProcessor="mule:sub-flow" times="1">
+            <mock:with-attributes>
+                <mock:with-attribute name="name" whereValue="#[matchContains('decision2SubFlow')]"/>
+            </mock:with-attributes>
+        </mock:verify-call>
+    </munit:test>
+	
+	<munit:test name="decisionflow-PATH2-flowvar-2-test-mock-call-1-suiteTest" description="MUnit Test">
+        <set-payload doc:name="Set Payload" value="#['value2']"/>
+        <flow-ref name="decisionFlow" doc:name="decisionFlow"/>
+        <munit:assert-on-equals expectedValue="#['Decision2']" actualValue="#[flowVars.decisionVariable]" doc:name="Assert Equals" message="Sorry did not get expacted value. i.e. Decision2 instead we got #[flowVars.decisionVariable]"/>
+	</munit:test>
+    
+</mule>
