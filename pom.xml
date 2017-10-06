@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tcs</groupId>
@@ -15,12 +14,92 @@
 
 		<mule.version>3.8.5</mule.version>
     	<mule.tools.version>1.2</mule.tools.version>
-		<munit.version>1.3.4</munit.version>
-    	<mule.munit.support.version>3.8.4</mule.munit.support.version>
+		<munit.version>1.3.5</munit.version>
+    	<mule.munit.support.version>3.8.5</mule.munit.support.version>
+    	<mule.project.filename>${project.artifactId}</mule.project.filename>
     </properties>
 
 	<build>
+	
+	<!--  FINAL COMMAND -->	
+			
+			<!--
+			mvn clean package -P dev
+			mvn deploy -Dcloudhub.username=Username -Dcloudhub.password=Password -Dcloudhub.domain=labmunitexample -P dev
+			mvn deploy -Dcloudhub.username=Username -Dcloudhub.password=Password -Dcloudhub.domain=labmunitexample -P sandbox
+			
+			-->			
+			<!--
+			mvn clean test package -P dev
+			mvn clean test package -P sandbox
+			mvn clean test package -P Production
+			-->
+            
+		<finalName>${project.artifactId}</finalName> 
+     	<resources>     	
+     		<resource>
+     			<directory>src/main/resources</directory>
+     			<includes>
+     				<include>log4j2.xml</include>
+     				<include>projectcommon.properties</include>     				 
+     				<include>mule*.properties</include>      				
+     			</includes>
+     		</resource>     		
+     	</resources>
+     	     	
+     	     	
 		<plugins>
+		
+			<!--  FINAL COMMAND -->	
+			<!-- 
+			mvn clean package -P dev
+			mvn deploy -Dcloudhub.username=akashsep2017 -Dcloudhub.password=MuleSoft@2017 -Dcloudhub.domain=labmunitexample -P dev
+			mvn deploy -Dcloudhub.username=akashsep2017 -Dcloudhub.password=MuleSoft@2017 -Dcloudhub.domain=labmunitexample -P dev
+			
+			-->
+     		
+	     	<plugin>
+				    <groupId>org.mule.tools.maven</groupId>
+				    <artifactId>mule-maven-plugin</artifactId>
+				    <version>2.0</version>
+				    <configuration>				    
+				        <deploymentType>cloudhub</deploymentType>
+				        <target>CloudHub</target>				        
+				        <muleVersion>${mule.version}</muleVersion>
+				        <username>${cloudhub.username}</username>
+				        <password>${cloudhub.password}</password>				        
+				        <domain>${cloudhub.domain}</domain>
+						<redeploy>true</redeploy>
+						<workerType>Micro</workerType>
+						<workers>1</workers>
+				        <environment>${env}</environment>
+				        <!-- <uri>https://anypoint.mulesoft.com</uri> -->
+				        <application>${project.basedir}/target/${project.artifactId}.zip</application>
+				        <applicationName>${cloudhub.domain}</applicationName>					        	
+				        <properties>
+   								<env.mule>${env}</env.mule>
+						</properties>	        
+				    </configuration>
+				    <executions>
+				        <execution>	
+				        	<id>deploy</id>
+          					<phase>deploy</phase>			           
+				            <goals>
+				                <goal>deploy</goal>
+				            </goals>
+				        </execution>
+				    </executions>
+			</plugin>
+			    		
+			<plugin>
+				  <groupId>org.apache.maven.plugins</groupId>
+				  <artifactId>maven-deploy-plugin</artifactId>
+				  <version>2.8.2</version>
+				  <configuration>
+				    <skip>false</skip>
+				  </configuration>
+			</plugin>
+			
 			<plugin>
 				<groupId>org.mule.tools.maven</groupId>
 				<artifactId>mule-app-maven-plugin</artifactId>
@@ -218,6 +297,72 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
+        
+         <pluginRepository>
+        	<id>mule-public</id>
+        	<url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+        	<snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+    	</pluginRepository>
     </pluginRepositories>
+
+ <profiles>
+    
+	 	  
+	  <profile>
+		    <id>dev</id>
+		    <activation>
+		      <activeByDefault>true</activeByDefault>
+		    </activation>
+		    <properties>
+		      <env>dev</env>
+		    </properties>
+	  </profile>
+	  
+	  <profile>
+		    <id>sandbox</id>
+		    <properties>
+		      <env>sandbox</env>
+		    </properties>
+	  </profile>
+	  
+	  <profile>
+		    <id>Production</id>
+		    <properties>
+		      <env>Production</env>
+		    </properties>
+	  </profile>
+	  
+	</profiles>
+	
+
+	
+		
+		
+		
+		<distributionManagement>	
+		 <repository>
+	      <uniqueVersion>false</uniqueVersion>
+	      <id>Local</id>
+	      <name>Local Repository</name>
+	      <url>file:///D:/Laptop_Backup/Users/191155/.m2/repository</url>
+	      <layout>default</layout>
+	    </repository>
+	    </distributionManagement>		
+		
+	<!-- 
+	<distributionManagement>
+	     <repository>
+            <uniqueVersion>false</uniqueVersion>
+          	<id>mycloudhub</id>
+          	<name>Cloud Hub</name>
+          	<url>https://anypoint.mulesoft.com/cloudhub/</url>
+          	<layout>default</layout>
+         </repository>
+        
+	</distributionManagement>	 -->
+
+
 
 </project>
